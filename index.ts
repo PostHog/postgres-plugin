@@ -189,8 +189,7 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
     }
 
     console.log(
-        `(Batch Id: ${payload.batchId}) Flushing ${payload.batch.length} event${
-            payload.batch.length > 1 ? 's' : ''
+        `(Batch Id: ${payload.batchId}) Flushing ${payload.batch.length} event${payload.batch.length > 1 ? 's' : ''
         } to Postgres instance`
     )
 
@@ -218,14 +217,21 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
 }
 
 const executeQuery = async (query: string, values: any[], config: PostgresMeta['config']): Promise<Error | null> => {
+    const basicConnectionOptions = config.databaseUrl ? {
+        connectionString: config.databaseUrl
+    } : {
+        user: config.dbUsername,
+        password: config.dbPassword,
+        host: config.host,
+        database: config.dbName,
+        port: parseInt(config.port),
+    }
     const pgClient = new Client(
-        `${config.databaseUrl}?ssl=true` ?? {
-            user: config.dbUsername,
-            password: config.dbPassword,
-            host: config.host,
-            database: config.dbName,
-            port: parseInt(config.port),
-            ssl: config.isHeroku === "Yes"
+        {
+            ...basicConnectionOptions,
+            ssl: {
+                rejectUnauthorized: config.isHeroku === "Yes"
+            }
         }
     )
 
