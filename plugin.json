@@ -1,0 +1,84 @@
+{
+    "name": "PostgreSQL Export Plugin",
+    "url": "https://github.com/posthog/postgres-plugin",
+    "description": "Export PostHog events to a PostgreSQL instance on ingestion.",
+    "main": "index.ts",
+    "posthogVersion": ">= 1.24.0",
+    "config": [
+        {
+            "markdown": "Read [the documentation](https://github.com/PostHog/postgres-plugin) here for instructions in getting these keys."
+        },
+        {
+            "key": "databaseUrl",
+            "name": "PostgreSQL Database URL",
+            "type": "string",
+            "hint": "You can use a URL containing host, port, username, and password, or fill in these fields individually below.",
+            "secret": true
+        },
+        {
+            "key": "host",
+            "name": "PostgreSQL instance host",
+            "type": "string",
+            "hint": "Example: `postgres.mydomain.com` (Required if Database URL is not specified)"
+        },
+        {
+            "key": "port",
+            "name": "PostgreSQL instance port",
+            "type": "string",
+            "default": "5439",
+            "hint": "Default: 5439 (Required if Database URL is not specified)"
+        },
+        {
+            "key": "dbName",
+            "name": "Database name",
+            "type": "string",
+            "hint": "Required if Database URL is not specified",
+            "default": "dev"
+        },
+        {
+            "key": "tableName",
+            "name": "Table name",
+            "type": "string",
+            "default": "posthog_event",
+            "hint": "The plugin will create a table with this name to store the events in"
+        },
+        {
+            "key": "dbUsername",
+            "name": "Username available to the plugin for accessing your database instance",
+            "type": "string",
+            "default": "1",
+            "hint": "This user needs table creation access (Required if Database URL is not specified)"
+        },
+        {
+            "key": "dbPassword",
+            "name": "Password for the username specified above",
+            "type": "string",
+            "default": "1",
+            "hint": "Required if Database URL is not specified",
+            "secret": true
+        },
+        {
+            "key": "uploadSeconds",
+            "name": "Upload at most every X seconds",
+            "type": "string",
+            "default": "30",
+            "hint": "If there are events to upload and this many seconds has passed since the last upload, send the events to Redshift. The value must be between 1 and 60 minutes.",
+            "required": true
+        },
+        {
+            "key": "uploadMegabytes",
+            "name": "Maximum upload size in megabytes",
+            "type": "string",
+            "default": "1",
+            "hint": "Always keep the uploaded files below this size limit, uploading more frequently than the time limit if needed. Events are kept in memory until then, so make sure your server has enough of it. The value must be between 1 and 10 MB.",
+            "required": true
+        },
+        {
+            "key": "eventsToIgnore",
+            "name": "Events to ignore",
+            "type": "string",
+            "default": "$feature_flag_called",
+            "hint": "Comma separated list of events to ignore"
+        }
+    ]
+}
