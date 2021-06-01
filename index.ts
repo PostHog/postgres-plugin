@@ -219,13 +219,13 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
 
 const executeQuery = async (query: string, values: any[], config: PostgresMeta['config']): Promise<Error | null> => {
     const pgClient = new Client(
-        config.databaseUrl ?? {
+        `${config.databaseUrl}?ssl=true` ?? {
             user: config.dbUsername,
             password: config.dbPassword,
             host: config.host,
             database: config.dbName,
             port: parseInt(config.port),
-            ssl: true
+            ssl: config.isHeroku === "Yes"
         }
     )
 
