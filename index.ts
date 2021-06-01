@@ -230,7 +230,7 @@ const executeQuery = async (query: string, values: any[], config: PostgresMeta['
         {
             ...basicConnectionOptions,
             ssl: {
-                rejectUnauthorized: config.isHeroku !== "Yes"
+                rejectUnauthorized: config.isHeroku === "No"
             }
         }
     )
