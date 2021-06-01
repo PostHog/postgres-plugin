@@ -20,7 +20,7 @@ type PostgresPlugin = Plugin<{
         uploadSeconds: string
         uploadMegabytes: string
         eventsToIgnore: string
-        isHeroku: "Yes" | "No"
+        isHeroku: 'Yes' | 'No'
     }
 }>
 
@@ -66,7 +66,6 @@ export const setupPlugin: PostgresPlugin['setupPlugin'] = async (meta) => {
         }
     }
 
-
     const uploadMegabytes = Math.max(1, Math.min(parseInt(config.uploadMegabytes) || 1, 10))
     const uploadSeconds = Math.max(1, Math.min(parseInt(config.uploadSeconds) || 1, 600))
 
@@ -96,7 +95,7 @@ export const setupPlugin: PostgresPlugin['setupPlugin'] = async (meta) => {
 
     global.buffer = createBuffer({
         limit: uploadMegabytes * 1024 * 1024,
-        timeoutSeconds: uploadSeconds, 
+        timeoutSeconds: uploadSeconds,
         onFlush: async (batch) => {
             await insertBatchIntoPostgres(
                 { batch, batchId: Math.floor(Math.random() * 1000000), retriesPerformedSoFar: 0 },
@@ -164,7 +163,7 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
         const { uuid, eventName, properties, elements, set, set_once, distinct_id, team_id, ip, site_url, timestamp } =
             payload.batch[i]
 
-        // Creates format: ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11), ($12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22) 
+        // Creates format: ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11), ($12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)
         valuesString += ' ('
         for (let j = 1; j <= 11; ++j) {
             valuesString += `$${11 * i + j}${j === 11 ? '' : ', '}`
@@ -173,12 +172,26 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
 
         values = [
             ...values,
-            ...[uuid, eventName, JSON.stringify(properties), JSON.stringify(elements), JSON.stringify(set), JSON.stringify(set_once), distinct_id, team_id, ip, site_url, timestamp],
+            ...[
+                uuid,
+                eventName,
+                JSON.stringify(properties),
+                JSON.stringify(elements),
+                JSON.stringify(set),
+                JSON.stringify(set_once),
+                distinct_id,
+                team_id,
+                ip,
+                site_url,
+                timestamp,
+            ],
         ]
     }
 
     console.log(
-        `(Batch Id: ${payload.batchId}) Flushing ${payload.batch.length} event${payload.batch.length > 1 ? 's' : ''} to Postgres instance`
+        `(Batch Id: ${payload.batchId}) Flushing ${payload.batch.length} event${
+            payload.batch.length > 1 ? 's' : ''
+        } to Postgres instance`
     )
 
     const queryError = await executeQuery(
@@ -204,22 +217,22 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
     }
 }
 
-const executeQuery = async (
-    query: string,
-    values: any[],
-    config: PostgresMeta['config']
-): Promise<Error | null> => {
-
-    const pgClient = new Client(config.databaseUrl ?? {
-        user: config.dbUsername,
-        password: config.dbPassword,
-        host: config.host,
-        database: config.dbName,
-        port: parseInt(config.port),
-        ssl: config.isHeroku === "Yes" ? {
-            rejectUnauthorized: false,
-        } : undefined
-    })
+const executeQuery = async (query: string, values: any[], config: PostgresMeta['config']): Promise<Error | null> => {
+    const pgClient = new Client(
+        config.databaseUrl ?? {
+            user: config.dbUsername,
+            password: config.dbPassword,
+            host: config.host,
+            database: config.dbName,
+            port: parseInt(config.port),
+            ssl:
+                config.isHeroku === 'Yes'
+                    ? {
+                          rejectUnauthorized: false,
+                      }
+                    : undefined,
+        }
+    )
 
     await pgClient.connect()
 
