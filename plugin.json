@@ -54,14 +54,14 @@
             "key": "dbUsername",
             "name": "Username available to the plugin for accessing your database instance",
             "type": "string",
-            "default": "1",
+            "default": "",
             "hint": "This user needs table creation access (Required if Database URL is not specified)"
         },
         {
             "key": "dbPassword",
             "name": "Password for the username specified above",
             "type": "string",
-            "default": "1",
+            "default": "",
             "hint": "Required if Database URL is not specified",
             "secret": true
         },
