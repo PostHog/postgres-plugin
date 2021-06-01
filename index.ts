@@ -238,4 +238,3 @@ export const teardownPlugin: PostgresPlugin['teardownPlugin'] = ({ global }) => 
 const sanitizeSqlIdentifier = (unquotedIdentifier: string): string => {
     return unquotedIdentifier.replace(/[^\w\d_]+/g, '')
 }
-// postgres://posthog:123456yZ@localhost:5432/posthog
