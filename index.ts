@@ -20,6 +20,7 @@ type PostgresPlugin = Plugin<{
         uploadSeconds: string
         uploadMegabytes: string
         eventsToIgnore: string
+        isHeroku: "Yes" | "No"
     }
 }>
 
@@ -215,6 +216,9 @@ const executeQuery = async (
         host: config.host,
         database: config.dbName,
         port: parseInt(config.port),
+        ssl: config.isHeroku === "Yes" ? {
+            rejectUnauthorized: false,
+        } : undefined
     })
 
     await pgClient.connect()

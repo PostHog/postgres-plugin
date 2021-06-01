@@ -9,6 +9,14 @@
             "markdown": "Read [the documentation](https://github.com/PostHog/postgres-plugin) here for instructions in getting these keys."
         },
         {
+            "key": "isHeroku",
+            "name": "Is your PostgreSQL instance hosted on Heroku?",
+            "type": "choice",
+            "choices": ["Yes", "No"],
+            "default": "No",
+            "hint": "This is necessary for appropriately configuring the database connection."
+        },
+        {
             "key": "databaseUrl",
             "name": "PostgreSQL Database URL",
             "type": "string",
