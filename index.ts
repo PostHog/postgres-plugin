@@ -225,12 +225,7 @@ const executeQuery = async (query: string, values: any[], config: PostgresMeta['
             host: config.host,
             database: config.dbName,
             port: parseInt(config.port),
-            ssl:
-                config.isHeroku === 'Yes'
-                    ? {
-                          rejectUnauthorized: false,
-                      }
-                    : undefined,
+            ssl: true
         }
     )
 
