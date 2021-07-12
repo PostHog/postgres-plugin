@@ -10,11 +10,11 @@
         },
         {
             "key": "isHeroku",
-            "name": "Is your PostgreSQL instance hosted on Heroku?",
+            "name": "Does your Postgres instance have a self-signed SSL certificate?",
             "type": "choice",
             "choices": ["Yes", "No"],
             "default": "No",
-            "hint": "This is necessary for appropriately configuring the database connection."
+            "hint": "In most cases, Heroku and RDS users should select 'Yes'."
         },
         {
             "key": "databaseUrl",
