@@ -1,7 +1,7 @@
 {
     "name": "@posthog/postgres-plugin",
     "private": true,
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Export PostHog events to a PostgreSQL instance on ingestion.",
     "devDependencies": {
         "@posthog/plugin-contrib": "^0.0.3",
