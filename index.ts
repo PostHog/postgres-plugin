@@ -101,7 +101,11 @@ export const setupPlugin: PostgresPlugin['setupPlugin'] = async (meta) => {
         config
     )
 
-    if (queryError) {
+    // Raise error, but ignore `duplicate key value violates unique constraint "pg_type_typname_nsp_index"`,
+    // which can occur when multiple plugin server instance run this CREATE TABLE query at the same time.
+    // `pg_type_typname_nsp_index` marks a race condition in Postgres, but it doesn't make CREATE TABLE IF NOT EXISTS
+    // any less safe.
+    if (queryError && !queryError.message.includes('pg_type_typname_nsp_index')) {
         throw new Error(`Unable to connect to PostgreSQL instance and create table with error: ${queryError.message}`)
     }
 
