@@ -35,8 +35,8 @@
             "key": "port",
             "name": "PostgreSQL instance port",
             "type": "string",
-            "default": "5439",
-            "hint": "Default: 5439 (Required if Database URL is not specified)",
+            "default": "5432",
+            "hint": "Default: 5432 (Required if Database URL is not specified)",
             "required_if": [["databaseUrl", ""]],
             "visible_if": [["databaseUrl", ""]]
         },
