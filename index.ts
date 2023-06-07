@@ -243,24 +243,25 @@ const executeQuery = async (query: string, values: any[], config: PostgresMeta['
               database: config.dbName,
               port: parseInt(config.port),
           }
-    const pgClient = new Client({
-        ...basicConnectionOptions,
-        ssl: {
-            rejectUnauthorized: config.hasSelfSignedCert === 'No',
-        },
-    })
-
-    await pgClient.connect()
-
+    
     let error: Error | null = null
+        
+    let pgClient = Client | null = null
     try {
+        pgClient = new Client({
+            ...basicConnectionOptions,
+            ssl: {
+                rejectUnauthorized: config.hasSelfSignedCert === 'No',
+            },
+        })
+
+        await pgClient.connect()
         await pgClient.query(query, values)
     } catch (err) {
         error = err as Error
+    } finally {
+        await pgClient?.end()
     }
-
-    await pgClient.end()
-
     return error
 }
 
