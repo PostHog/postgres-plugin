@@ -179,14 +179,13 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
         const { uuid, eventName, properties, elements, set, set_once, distinct_id, team_id, ip, site_url, timestamp } =
             payload.batch[i]
 
-
         // Creates format: ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11), ($12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)
         valuesString += ' ('
         for (let j = 1; j <= 11; ++j) {
             valuesString += `$${11 * i + j}${j === 11 ? '' : ', '}`
         }
         valuesString += `)${i === payload.batch.length - 1 ? '' : ','}`
-        
+
         values = values.concat([
             uuid || generateUuid(),
             eventName,
@@ -243,10 +242,10 @@ const executeQuery = async (query: string, values: any[], config: PostgresMeta['
               database: config.dbName,
               port: parseInt(config.port),
           }
-    
+
     let error: Error | null = null
-        
-    let pgClient = Client | null = null
+
+    let pgClient: Client | null = null
     try {
         pgClient = new Client({
             ...basicConnectionOptions,
@@ -254,9 +253,8 @@ const executeQuery = async (query: string, values: any[], config: PostgresMeta['
                 rejectUnauthorized: config.hasSelfSignedCert === 'No',
             },
         })
-
         await pgClient.connect()
-        await pgClient.query(query, values)
+        //await pgClient.query(query, values)
     } catch (err) {
         error = err as Error
     } finally {
