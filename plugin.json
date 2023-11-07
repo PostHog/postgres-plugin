@@ -50,6 +50,13 @@
             "visible_if": [["databaseUrl", ""]]
         },
         {
+            "key": "schemaName",
+            "name": "Schema name",
+            "type": "string",
+            "default": "public",
+            "hint": "Using a non default schema name needs the schema to be created beforehand, set to public if unsure"
+        },
+        {
             "key": "tableName",
             "name": "Table name",
             "type": "string",

@@ -5,6 +5,7 @@ type PostgresPlugin = Plugin<{
     global: {
         pgClient: Client
         eventsToIgnore: Set<string>
+        sanitizedSchemaName: string
         sanitizedTableName: string
     }
     config: {
@@ -12,6 +13,7 @@ type PostgresPlugin = Plugin<{
         host: string
         port: string
         dbName: string
+        schemaName: string
         tableName: string
         dbUsername: string
         dbPassword: string
@@ -81,10 +83,11 @@ export const setupPlugin: PostgresPlugin['setupPlugin'] = async (meta) => {
         }
     }
 
+    global.sanitizedSchemaName = sanitizeSqlIdentifier(config.schemaName)
     global.sanitizedTableName = sanitizeSqlIdentifier(config.tableName)
 
     const queryError = await executeQuery(
-        `CREATE TABLE IF NOT EXISTS ${global.sanitizedTableName} (
+        `CREATE TABLE IF NOT EXISTS ${global.sanitizedSchemaName}.${global.sanitizedTableName} (
             uuid varchar(200),
             event varchar(200),
             properties jsonb,
@@ -209,7 +212,7 @@ export const insertBatchIntoPostgres = async (payload: UploadJobPayload, { globa
     )
 
     const queryError = await executeQuery(
-        `INSERT INTO ${global.sanitizedTableName} (uuid, event, properties, elements, set, set_once, distinct_id, team_id, ip, site_url, timestamp)
+        `INSERT INTO ${global.sanitizedSchemaName}.${global.sanitizedTableName} (uuid, event, properties, elements, set, set_once, distinct_id, team_id, ip, site_url, timestamp)
         VALUES ${valuesString}`,
         values,
         config
