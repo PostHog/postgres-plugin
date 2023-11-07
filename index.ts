@@ -84,7 +84,7 @@ export const setupPlugin: PostgresPlugin['setupPlugin'] = async (meta) => {
     global.sanitizedTableName = sanitizeSqlIdentifier(config.tableName)
 
     const queryError = await executeQuery(
-        `CREATE TABLE IF NOT EXISTS public.${global.sanitizedTableName} (
+        `CREATE TABLE IF NOT EXISTS ${global.sanitizedTableName} (
             uuid varchar(200),
             event varchar(200),
             properties jsonb,
@@ -265,5 +265,5 @@ const executeQuery = async (query: string, values: any[], config: PostgresMeta['
 }
 
 const sanitizeSqlIdentifier = (unquotedIdentifier: string): string => {
-    return unquotedIdentifier.replace(/[^\w\d_]+/g, '')
+    return '"' + unquotedIdentifier.replace(/"/g, '""') + '"'
 }
