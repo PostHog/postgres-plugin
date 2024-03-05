@@ -1,5 +1,8 @@
 # PostgreSQL Plugin
 
+> **Warning**
+> This plugin has been deprecated in favor of our [Postgres destination for batch exports](https://posthog.com/docs/cdp/batch-exports/postgres).
+
 Export PostHog events to a PostgreSQL instance on ingestion.
 
 ## Instructions
