@@ -1,7 +1,7 @@
-# PostgreSQL Plugin
+> [!WARNING]
+> ## This plugin has been deprecated in favor of our [BigQuery destination for batch exports](https://posthog.com/docs/cdp/batch-exports/bigquery).
 
-> **Warning**
-> This plugin has been deprecated in favor of our [Postgres destination for batch exports](https://posthog.com/docs/cdp/batch-exports/postgres).
+# PostgreSQL Plugin
 
 Export PostHog events to a PostgreSQL instance on ingestion.
 
